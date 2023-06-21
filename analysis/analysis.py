@@ -1,50 +1,30 @@
-# -*- coding: utf-8 -*-
+from abc import ABC, abstractmethod
+import numpy as np
 
-import abc
+class Analysis(ABC):
+    """Abstract class for analysis methods."""
 
-class Analysis(metaclass=abc.ABCMeta):
-  """Analysis
-  An Abstract class used to set the minimum methods that need to be defined
-  when creating a new analysis method
+    @abstractmethod
+    def perform_assimilation(self, background, observation):
+        """Perform the assimilation step given the background and observations."""
+        pass
 
-    Attributes
-    ----------
-    None
+    @abstractmethod
+    def get_analysis_state(self):
+        """Return the computed column mean of the ensemble Xa."""
+        pass
 
-    Methods
-    -------
-    performassimilation()
-      None
-    getanalysisstate()
-      None
-    performcovarianceinflation()
-      None
-  """
-  def __init__(self):
-    """
-        Parameters
-        ----------
-        None
-    """
-    pass;
-  def performassimilation():
-    """
-        Parameters
-        ----------
-        None
-    """
-    pass;
-  def getanalysisstate():
-    """
-        Parameters
-        ----------
-        None
-    """
-    pass;
-  def performcovarianceinflation():
-    """
-        Parameters
-        ----------
-        None
-    """
-    pass;
+    @abstractmethod
+    def get_ensemble(self):
+        """Return the ensemble Xa."""
+        pass
+
+    @abstractmethod
+    def get_error_covariance(self):
+        """Return the computed covariance matrix of the ensemble Xa."""
+        pass
+
+    @abstractmethod
+    def inflate_ensemble(self, inflation_factor):
+        """Compute the new ensemble Xa given the inflation factor."""
+        pass

@@ -1,78 +1,31 @@
-# -*- coding: utf-8 -*-
+from abc import ABC, abstractmethod
+from scipy.integrate import odeint
+import numpy as np
 
-import abc
-class Model(metaclass=abc.ABCMeta):
-  """Model
-  An Abstract class used to set the minimum methods that need to be defined
-  when creating a new model
+class Model(ABC):
+    """Abstract class for models."""
 
-    Attributes
-    ----------
-    None
+    @abstractmethod
+    def get_number_of_variables(self):
+        """Returns the number of variables."""
+        pass
 
-    Methods
-    -------
-    getinitialcondition()
-      None
-    propagate()
-      None
-    propagate()
-      None
-    getnumberofvariables()
-      None
-    createlocalizationmatrix()
-      None
-    getlocalizationmatrix()
-      None
-    getprecisionmatrix()
-      None
-  """
-  def __init__(self):
-    """
-        Parameters
-        ----------
-        None
-    """
-    pass;
-  def getinitialcondition():
-    """
-        Parameters
-        ----------
-        None
-    """
-    pass;
-  def propagate():
-    """
-        Parameters
-        ----------
-        None
-    """
-    pass;
-  def getnumberofvariables():
-    """
-        Parameters
-        ----------
-        None
-    """
-    pass;
-  def createlocalizationmatrix():
-    """
-        Parameters
-        ----------
-        None
-    """
-    pass;
-  def getlocalizationmatrix():
-    """
-        Parameters
-        ----------
-        None
-    """
-    pass;
-  def getprecisionmatrix():
-    """
-        Parameters
-        ----------
-        None
-    """
-    pass;
+    @abstractmethod
+    def get_initial_condition(self):
+        """Computes the initial values to propagate the model."""
+        pass
+
+    @abstractmethod
+    def propagate(self, x0, T, just_final_state=True):
+        """Solves a system of ordinary differential equations using x0 as initial conditions."""
+        pass
+
+    @abstractmethod
+    def create_decorrelation_matrix(self, r):
+        """Create L matrix by removing correlations."""
+        pass
+
+    @abstractmethod
+    def get_decorrelation_matrix(self):
+        """Get the decorrelation matrix."""
+        pass

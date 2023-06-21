@@ -5,161 +5,130 @@ import numpy as np
 from models.model import Model
 
 class Lorenz96(Model):
-  """Implementation of Lorenz 96 model
-  
-    Attributes
-    ----------
-    n : int
-      number of variables
-    F : int
-      the forcing constant
+    """Implementation of the Lorenz 96 model"""
 
-    Methods
-    -------
-    lorenz96(x, t)
-      Computes the dynamical system.
-    getnumberofvariables()
-      Returns the number of variables.
-    getinitialcondition(seed, T)
-      Computes the initial values that are going to be used to propagate the
-      model.
-    propagate(x0, T, just_final_state)
-      Solves a system of orninary differential equations using x0 has initial
-      conditions with the sequence of time points T.
-    createdecorrelatonmatrix(r)
-      Create L matrix removing correlation.
-    getdecorrelationmatrix()
-      Get L matrix.
-    getngb()
+    def __init__(self, n=40, F=8):
+        """
+        Initialize the Lorenz96 model.
 
-    getpre()
-
-  """
-
-  n = 40;
-  F = 8;
-
-  def __init__(self,n = 40,F = 8):
-    """
-    Parameters
-    ----------
-      n : int
-        number of variables
-      F : int
-        the forcing constant
-    """
-    self.n = n;
-    self.F = F;
-
-  def lorenz96(self, x, t):
-    """
-        Computes the dynamical system.
         Parameters
         ----------
-        x : int
-          State of the system
-        t : int
-          timestamp
-          value used as alpha in the ridge model
+        n : int, optional
+            Number of variables (default is 40).
+        F : int, optional
+            Forcing constant (default is 8).
+        """
+        self.n = n
+        self.F = F
+        self._L = None  # Decorrelation matrix
+
+    def lorenz96(self, x, t):
+        """
+        Computes the Lorenz96 dynamical system.
+
+        Parameters
+        ----------
+        x : array-like
+            State of the system.
+        t : float
+            Timestamp.
 
         Returns
         -------
-        Dynamical model
-    """
-    n = self.n;
-    F = self.F;
-    return [(x[np.mod(i+1,n)]-x[i-2])*x[i-1]-x[i]+F for i in range(0,n)];
+        array-like
+            Dynamical model.
+        """
+        n = self.n
+        F = self.F
+        return [(x[np.mod(i+1, n)] - x[i-2]) * x[i-1] - x[i] + F for i in range(n)]
 
-  def getnumberofvariables(self):
-    """Returns the number of variables.
-        Parameters
-        ----------
-        None
+    def get_number_of_variables(self):
+        """Returns the number of variables.
 
         Returns
         -------
-        number of variables
-    """
-    return self.n;
-  
-  def getinitialcondition(self, seed = 10, T = np.arange(0,10,0.1)):
-    """Computes the initial values that are going to be used to 
-        propagate the model.
+        int
+            Number of variables.
+        """
+        return self.n
+
+    def get_initial_condition(self, seed=10, T=np.arange(0, 10, 0.1)):
+        """Computes the initial values to propagate the model.
+
         Parameters
         ----------
-        seed : int 
-          Seed to be used to get the initial conditions.
-        T : timestamp vector
-          Timestamp that is going to be used to propagate the model.
+        seed : int, optional
+            Seed used to generate the initial conditions (default is 10).
+        T : array-like, optional
+            Timestamp vector used for propagation (default is np.arange(0, 10, 0.1)).
 
         Returns
         -------
-        Propagation of the model.
-    """
-    n = self.n;
-    np.random.seed(seed=10);
-    x0 = np.random.randn(n);
-    return self.propagate(x0,T);
+        array-like
+            Propagation of the model.
+        """
+        np.random.seed(seed=seed)
+        x0 = np.random.randn(self.n)
+        return self.propagate(x0, T)
 
-  def propagate(self, x0, T, just_final_state=True):
-    """Solves a system of orninary differential equations using x0 has 
-       initial conditions with the sequence of time points T.
+    def propagate(self, x0, T, just_final_state=True):
+        """Solves a system of ordinary differential equations using x0 as initial conditions.
+
         Parameters
         ----------
-        x0 : int 
-          Seed to be used to get the initial conditions.
-        T : timestamp vector
-          Timestamp that is going to be used to propagate the model.
-        just_final_state : boolean
-          variable that decides what will be returned. if just the final
-          state or all the states.
+        x0 : array-like
+            Initial conditions.
+        T : array-like
+            Timestamp vector used for propagation.
+        just_final_state : bool, optional
+            Determines whether to return just the final state or all states (default is True).
 
         Returns
         -------
-        final or all states.
-    """
-    x1 = odeint(self.lorenz96,x0,T);
-    if just_final_state:
-      return x1[-1,:];
-    else:
-      return x1;
-    
-  def createdecorrelatonmatrix(self,r):
-    """Create L matrix removing correlation.
+        array-like
+            Final state or all states.
+        """
+        x1 = odeint(self.lorenz96, x0, T)
+        if just_final_state:
+            return x1[-1, :]
+        else:
+            return x1
+
+    def create_decorrelation_matrix(self, r):
+        """Create L matrix by removing correlations.
+
         Parameters
         ----------
         r : int
-          value used in the process of removing correlations
+            Value used in the process of removing correlations.
 
         Returns
         -------
-        matrix with correlations removed
-    """
-    n = self.n;
-    L = np.zeros((n,n));
-    for i in range(0,n):
-      for j in range(i,n):
-        dij = np.min([np.abs(i-j),np.abs((n-1)-j+i)]);
-        L[i,j] = (dij**2)/(2*r**2);
-        L[j,i] = L[i,j];
-    self.L = np.exp(-L);
-    
-  def getdecorrelatonmatrix(self):
-    """Get L matrix.
-        Parameters
-        ----------
-        None
+        array-like
+            Matrix with correlations removed.
+        """
+        n = self.n
+        L = np.zeros((n, n))
+        for i in range(n):
+            for j in range(i, n):
+                dij = np.min([np.abs(i-j), np.abs((n-1)-j+i)])
+                L[i, j] = (dij**2) / (2 * r**2)
+                L[j, i] = L[i, j]
+        self._L = np.exp(-L)
+
+    def get_decorrelation_matrix(self):
+        """Get the decorrelation matrix.
 
         Returns
         -------
-        L matrix.
-    """
-    return self.L;
-  
-  def getngb(self,i):
-    return np.arange(i-self.r,i+self.r+1)%(self.n);
-  
-  def getpre(self,i):
-    ngb = self.getngb(i);
-    return ngb[ngb<i];
+        array-like
+            Decorrelation matrix.
+        """
+        return self._L
     
+    def get_ngb(self, i, r):
+        return np.arange(i-r,i+r+1)%(self.n)
+    
+    def get_pre(self, i, r):
+        ngb = self.get_ngb(i, r)
+        return ngb[ngb<i]
