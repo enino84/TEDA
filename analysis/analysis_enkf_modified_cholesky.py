@@ -22,7 +22,7 @@ class AnalysisEnKFModifiedCholesky(Analysis):
         inflate_ensemble(inflation_factor): Computes new ensemble Xa given the inflation factor
     """
 
-    def __init__(self, model, r=1):
+    def __init__(self, model, r=1, **kwargs):
         """
         Initialize an instance of AnalysisEnKFModifiedCholesky.
 

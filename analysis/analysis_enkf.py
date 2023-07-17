@@ -23,7 +23,7 @@ class AnalysisEnKF(Analysis):
         Compute the new ensemble Xa given the inflation factor
     """
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         """
         Initialize the AnalysisEnKF object.
         

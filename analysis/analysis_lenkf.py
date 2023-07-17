@@ -4,7 +4,7 @@ from analysis.analysis import Analysis
 class AnalysisLEnKF(Analysis):
     """Analysis LEnKF"""
 
-    def __init__(self, model, r=1):
+    def __init__(self, model, r=1, **kwargs):
         """
         Initialize the AnalysisLEnKF object.
 

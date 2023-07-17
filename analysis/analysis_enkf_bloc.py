@@ -4,7 +4,7 @@ from analysis.analysis import Analysis
 class AnalysisEnKFBLoc(Analysis):
     """Analysis EnKF B-Loc"""
 
-    def __init__(self, model, r=1):
+    def __init__(self, model, r=1, **kwargs):
         """
         Initialize the AnalysisEnKFBLoc object.
 

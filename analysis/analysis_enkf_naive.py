@@ -5,7 +5,7 @@ from analysis.analysis import Analysis
 
 
 class AnalysisEnKFNaive(Analysis):
-    def __init__(self):
+    def __init__(self, **kwargs):
         pass
 
     def perform_assimilation(self, background, observation):

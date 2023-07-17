@@ -18,7 +18,7 @@ class AnalysisEnKFCholesky(Analysis):
         get_error_covariance(): Returns the computed covariance matrix of the ensemble Xa
         inflate_ensemble(inflation_factor): Computes new ensemble Xa given the inflation factor
     """
-    def __init__(self):
+    def __init__(self, **kwargs):
         """
         Parameters:
             None

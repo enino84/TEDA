@@ -23,7 +23,7 @@ class AnalysisEnSRF(Analysis):
         Computes the new ensemble Xa given the inflation factor.
     """
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         """
         Initializes the AnalysisEnKF object.
         """

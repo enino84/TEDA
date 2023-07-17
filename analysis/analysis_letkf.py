@@ -4,7 +4,7 @@ from analysis.analysis import Analysis
 class AnalysisLETKF(Analysis):
     """Analysis Local Ensemble Transform Kalman Filter (LETKF)"""
 
-    def __init__(self, model, r=1):
+    def __init__(self, model, r=1, **kwargs):
         """
         Initialize the AnalysisLETKF object.
 

@@ -67,6 +67,7 @@ class Background:
         for e in range(0, self.ensemble_size):
             Xb[:, e] = self.model.propagate(Xb[:, e], time)
         self.Xb = Xb
+        self.Xb0 = Xb
         return Xb
   
     def forecast_step(self, Xb, time=np.arange(0,1,0.01)):

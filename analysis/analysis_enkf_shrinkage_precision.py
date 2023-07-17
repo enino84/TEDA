@@ -24,7 +24,7 @@ class AnalysisEnKFShrinkagePrecision(Analysis):
         inflate_ensemble(inflation_factor): Computes new ensemble Xa given the inflation factor
     """
 
-    def __init__(self, model, r=1):
+    def __init__(self, model, r=1, **kwargs):
         """
         Initialize an instance of AnalysisEnKFModifiedCholesky.
 
@@ -111,7 +111,7 @@ class AnalysisEnKFShrinkagePrecision(Analysis):
 
         alpha_ = (gamma/(1+gamma)) * min(1, N/n)
 
-        print(alpha_, 1-alpha_)
+        #print(alpha_, 1-alpha_)
 
         Binv_shrunk =  alpha_ * Binv + (1-alpha_) * Pseu
 
