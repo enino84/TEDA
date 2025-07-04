@@ -115,6 +115,11 @@ plt.plot(np.log10(erra),'-or')
 plt.show()
 ```
 
+📁 Example usage
+
+See [`examples/basic_template.py`](examples/basic_template.py) for a complete simulation workflow.
+
+
 ## Supported methods
 
 

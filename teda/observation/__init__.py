@@ -5,4 +5,5 @@ Created on Thu Oct 22 00:43:05 2020
 @author: ElíasN
 """
 
+from .observation import Observation
 
