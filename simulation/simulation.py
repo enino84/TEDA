@@ -1,48 +1,22 @@
 # -*- coding: utf-8 -*-
-
 import numpy as np
+import logging
 
 class Simulation:
-    """Class that runs the simulation and calculates the errors.
-
-    Attributes
-    ----------
-    model : Model object
-        An object that has all the methods and attributes of the given model.
-    background : Background object
-        An object that has all the methods and attributes of the given background.
-    analysis : Analysis object
-        An object that has all the methods and attributes of the given analysis.
-    observation : Observation object
-        An object that has all the methods and attributes of the given observation.
-    params : dict, optional
-        Parameters needed for the simulation.
-
-    Methods
-    -------
-    relative_error(xr, xs)
-        Calculates the Root-Mean-Square Error (RMSE).
-    run()
-        Runs the simulation with the given parameters.
-    get_errors()
-        Returns the errors of the background and analysis states.
-    """
+    """Class that runs the simulation and calculates the errors."""
 
     def __init__(self, model, background, analysis, observation,
-                 params={'obs_freq': 0.1, 'obs_times': 15, 'inf_fact': 1.04}):
+                 params={'obs_freq': 0.1, 'obs_times': 15, 'inf_fact': 1.04},
+                 log_level=logging.INFO):
         """
         Parameters
         ----------
         model : Model object
-            An object that has all the methods and attributes of the given model.
         background : Background object
-            An object that has all the methods and attributes of the given background.
         analysis : Analysis object
-            An object that has all the methods and attributes of the given analysis.
         observation : Observation object
-            An object that has all the methods and attributes of the given observation.
-        params : dict, optional
-            Parameters needed for the simulation.
+        params : dict
+        log_level : logging level or None to disable logging
         """
         self.model = model
         self.background = background
@@ -52,78 +26,54 @@ class Simulation:
         self.obs_times = params['obs_times']
         self.inf_fact = params['inf_fact']
 
+        # Setup logging
+        self.logger = logging.getLogger("Simulation")
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter(
+            "[%(asctime)s] %(levelname)s - %(message)s", datefmt="%H:%M:%S")
+        handler.setFormatter(formatter)
+        self.logger.handlers = []  # Reset handlers
+        self.logger.addHandler(handler)
+        if log_level is not None:
+            self.logger.setLevel(log_level)
+        else:
+            self.logger.disabled = True
+
     def relative_error(self, xr, xs):
-        """Calculates the Root-Mean-Square Error (RMSE).
-
-        Parameters
-        ----------
-        xr : vector
-            Reference vector of values.
-        xs : vector
-            Calculated vector given the assimilation step.
-
-        Returns
-        -------
-        Root-Mean-Square Error (RMSE) of xr and xs.
-        """
+        """Calculates RMSE."""
         return np.linalg.norm(xs - xr) / np.linalg.norm(xr)
 
     def run(self):
-        """Runs the simulation given the background, observation, analysis method, and model.
-
-        Parameters
-        ----------
-        None
-
-        Returns
-        -------
-        None
-        """
+        """Runs the simulation."""
         self.error_a = np.zeros(self.obs_times)
         self.error_b = np.zeros(self.obs_times)
-        background = self.background
-        observation = self.observation
-        model = self.model
-        analysis = self.analysis
 
-        xtk = model.get_initial_condition()  # For reference
-        ensemble_size = background.get_ensemble_size()
-        Xbk = background.get_initial_ensemble()
-
+        xtk = self.model.get_initial_condition()
+        Xbk = self.background.get_initial_ensemble()
         T = np.linspace(0, self.obs_freq, num=2)
 
-        for k in range(0, self.obs_times):
-            print(k)
+        for k in range(self.obs_times):
+            self.logger.info(f"Time step {k+1}/{self.obs_times}")
 
-            # Observations
-            observation.generate_observation(xtk)
+            self.observation.generate_observation(xtk)
+            Xak = self.analysis.perform_assimilation(self.background, self.observation)
 
-            # Analysis step
-            Xak = analysis.perform_assimilation(background, observation)
-
-            # Covariance inflation
             if self.inf_fact > 0:
-                analysis.inflate_ensemble(self.inf_fact)
+                self.analysis.inflate_ensemble(self.inf_fact)
+                self.logger.debug(f"Inflated ensemble with factor {self.inf_fact}")
 
-            # Error computation
-            xak = analysis.get_analysis_state()
+            xak = self.analysis.get_analysis_state()
             self.error_a[k] = self.relative_error(xtk, xak)
-            xbk = background.get_background_state()
+            xbk = self.background.get_background_state()
             self.error_b[k] = self.relative_error(xtk, xbk)
 
-            # Forecast step
-            Xbk = background.forecast_step(Xak, T)
-            xtk = model.propagate(xtk, T)
+            self.logger.debug(f"Background error: {self.error_b[k]:.4f}, Analysis error: {self.error_a[k]:.4f}")
+
+            Xbk = self.background.forecast_step(Xak, T)
+            xtk = self.model.propagate(xtk, T)
+
+        self.logger.info("Simulation completed.")
 
     def get_errors(self):
-        """Returns the background and analysis error vectors.
-
-        Parameters
-        ----------
-        None
-
-        Returns
-        -------
-        Background and analysis errors of the simulation.
-        """
+        """Returns the background and analysis error vectors."""
         return self.error_b, self.error_a

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-import scipy as sci
-from analysis.analysis import Analysis
 from sklearn.linear_model import Ridge
+
+from analysis.analysis import Analysis
 
 
 class AnalysisEnKFModifiedCholesky(Analysis):

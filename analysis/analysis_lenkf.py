@@ -1,4 +1,5 @@
 import numpy as np
+
 from analysis.analysis import Analysis
 
 class AnalysisLEnKF(Analysis):

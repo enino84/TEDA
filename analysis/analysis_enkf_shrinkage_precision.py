@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-import scipy as sci
-from analysis.analysis import Analysis
 from sklearn.linear_model import Ridge
-import matplotlib.pyplot as plt
-import seaborn as sns
+
+from analysis.analysis import Analysis
 
 
 class AnalysisEnKFShrinkagePrecision(Analysis):

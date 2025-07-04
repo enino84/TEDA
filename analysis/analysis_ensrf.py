@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-import scipy as sci
+
 from analysis.analysis import Analysis
 
 

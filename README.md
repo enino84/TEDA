@@ -58,13 +58,40 @@ Set up the parameters for the simulation:
 
 ```python
 params = {'obs_freq': 0.1, 'obs_times': 10, 'inf_fact': 1.04}
-simulation = Simulation(model, background, analysis, observation, params=params)
+
+simulation = Simulation(
+    model,
+    background,
+    analysis,
+    observation,
+    params=params,
+    log_level=None  # set to None to disable logging
+)
 ```
 
 and then, run the simulation!
 
 ```python
 simulation.run()
+```
+
+
+### ✨ Logging (Optional)
+
+> 💡 **Note:** If you want to enable logs (e.g., for debugging or monitoring), just pass a `log_level` when creating the simulation.
+> To **disable logs**, use `log_level=None`.
+
+```python
+import logging
+
+simulation = Simulation(
+    model,
+    background,
+    analysis,
+    observation,
+    params=params,
+    log_level=logging.INFO  # set to None to disable logging
+)
 ```
 
 You can then request the backgound and analysis errors per assimilation step for plotting purposes or statistical computations:
