@@ -12,8 +12,6 @@ Equipped with a diverse range of features and functionalities, TEDA enriches the
 
 TEDA offers numerous ensemble-based DA methods, allowing students to explore an extensive range of techniques. From the stochastic ensemble Kalman filter (EnKF) to dual EnKF formulations, EnKF via Cholesky decomposition, EnKF based on modified Cholesky decomposition, EnKF based on B-localization, and beyond, TEDA equips learners with a comprehensive toolkit to study and compare various DA methodologies.
 
-To enhance the learning experience further, TEDA incorporates a selection of captivating toy models. These models, including the Duffing equation (2 variables), the Lorenz 63 model (3 variables), and the Lorenz 96 model (40 variables), exhibit chaotic behavior under specific parameter configurations. Such models provide an excellent opportunity for students to experiment, validate, and gain hands-on experience with diverse DA methods.
-
 TEDA's foundation is rooted in the Object-Oriented Programming (OOP) paradigm, enabling effortless integration of new techniques and models. This ensures that TEDA remains at the forefront of the rapidly evolving field of ensemble-based DA, allowing educators and researchers to incorporate the latest advancements into their teaching and experimentation.
 
 Embark on a captivating journey of discovery and knowledge with TEDA as it unveils the secrets of data assimilation. Simulate various DA scenarios, experiment with different model configurations, and witness firsthand the transformative impact of ensemble-based DA methods on forecast accuracy and data analysis.
@@ -21,6 +19,16 @@ Embark on a captivating journey of discovery and knowledge with TEDA as it unvei
 Unlock your true potential in the realm of data assimilation with TEDA. Whether you are an enthusiastic student or a dedicated educator, TEDA stands as your ultimate companion in unraveling the complexities of ensemble-based DA.
 
 Keywords: Data Assimilation, Ensemble Kalman Filter, Education, Python.
+
+### 🧪 Toy Models for Data Assimilation
+
+To enhance the learning experience, **TEDA** is built around **toy models** that exhibit chaotic behavior under specific configurations. These models are ideal for experimenting with and validating various Data Assimilation (DA) techniques in a hands-on, controlled setting.
+
+Currently, TEDA includes the **Lorenz 96 model** (40 variables), a well-known benchmark in DA research.
+
+> 📌 *Support for other classic chaotic systems like the Duffing equation and Lorenz 63 may be added in future versions.*
+
+
 
 ## How easy is to use it?
 
