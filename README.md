@@ -31,7 +31,7 @@ You can also use this BibTeX entry:
 ---
 
 
-Introducing TEDA: The Premier Python Toolbox for Teaching Ensemble-based Data Assimilation
+## Introducing TEDA: The Premier Python Toolbox for Teaching Ensemble-based Data Assimilation
 
 ![Class Diagram](imgs/Class_TEDA.svg)
 
