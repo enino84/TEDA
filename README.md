@@ -119,8 +119,6 @@ plt.show()
 
 See [`examples/basic_template.py`](examples/basic_template.py) for a complete simulation workflow.
 
-Perfecto, aquí tienes un bloque listo para agregar a tu `README.md`, que explica cómo instalar los requisitos y ejecutar el ejemplo básico con buenas prácticas (virtualenv + modo módulo):
-
 ---
 
 ### 🚀 Installation and Quick Start
