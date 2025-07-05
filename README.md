@@ -29,8 +29,6 @@ You can also use this BibTeX entry:
 [![Cite TEDA](https://img.shields.io/badge/Cite-TEDA-blue.svg)](https://doi.org/10.1007/978-3-031-08760-8_60)
 [![PyPI version](https://badge.fury.io/py/pyteda.svg)](https://pypi.org/project/pyteda/)
 
----
-
 ### 📦 Installation
 
 You can install **pyteda** directly from PyPI:
@@ -38,7 +36,7 @@ You can install **pyteda** directly from PyPI:
 ```bash
 pip install pyteda
 ```
-
+---
 
 ## Introducing TEDA: The Premier Python Toolbox for Teaching Ensemble-based Data Assimilation
 
