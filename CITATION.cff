@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use TEDA in your research, teaching, or publications, please cite the following paper:"
+title: "TEDA: A Computational Toolbox for Teaching Ensemble Based Data Assimilation"
+authors:
+  - family-names: Nino-Ruiz
+    given-names: Elias D.
+  - family-names: Valbuena
+    given-names: Sebastian Racedo
+date-released: 2022-06-21
+doi: 10.1007/978-3-031-08760-8_60
+version: 0.1.0
+repository-code: https://github.com/eninofw/teda
+conference:
+  name: "International Conference on Computational Science (ICCS 2022)"
+  location: "London, UK"
+  date: 2022-06-21
+url: https://link.springer.com/chapter/10.1007/978-3-031-08760-8_60
+license: MIT

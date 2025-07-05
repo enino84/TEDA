@@ -1,5 +1,31 @@
 # TEDA - A Computational Toolbox for Teaching Ensemble Based Data Assimilation
 
+### 📚 Citation
+
+If you use **TEDA** in your teaching, research, or publications, please cite the following paper:
+
+> **Nino-Ruiz, E.D., Valbuena, S.R.** (2022).
+> *TEDA: A Computational Toolbox for Teaching Ensemble Based Data Assimilation*.
+> In: Groen, D., de Mulatier, C., Paszynski, M., Krzhizhanovskaya, V.V., Dongarra, J.J., Sloot, P.M.A. (eds) **Computational Science – ICCS 2022**.
+> Lecture Notes in Computer Science, vol 13353. Springer, Cham.
+> [https://doi.org/10.1007/978-3-031-08760-8\_60](https://doi.org/10.1007/978-3-031-08760-8_60)
+
+You can also use this BibTeX entry:
+
+```bibtex
+@inproceedings{nino2022teda,
+  title={TEDA: A Computational Toolbox for Teaching Ensemble Based Data Assimilation},
+  author={Nino-Ruiz, Elias D. and Valbuena, Sebastian Racedo},
+  booktitle={Computational Science – ICCS 2022},
+  series={Lecture Notes in Computer Science},
+  volume={13353},
+  pages={787--801},
+  year={2022},
+  publisher={Springer, Cham},
+  doi={10.1007/978-3-031-08760-8_60}
+}
+```
+
 Introducing TEDA: The Premier Python Toolbox for Teaching Ensemble-based Data Assimilation
 
 ![Class Diagram](imgs/Class_TEDA.svg)
