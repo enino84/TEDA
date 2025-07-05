@@ -2,3 +2,5 @@ numpy
 scipy
 matplotlib
 scikit-learn
+build 
+twine
