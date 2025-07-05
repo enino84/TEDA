@@ -31,10 +31,6 @@ You can also use this BibTeX entry:
 
 ---
 
-Perfect! Here's an updated `README.md` **section** in English with everything you need now that `pyteda` is published on PyPI:
-
----
-
 ### 📦 Installation
 
 You can install **pyteda** directly from PyPI:
