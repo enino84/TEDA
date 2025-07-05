@@ -5,7 +5,7 @@ Created on Thu Oct 22 00:43:05 2020
 @author: ElíasN
 """
 
-from .analysis import Analysis
+from .analysis_core import Analysis
 from .analysis_enkf import AnalysisEnKF
 from .analysis_enkf_bloc import AnalysisEnKFBLoc
 from .analysis_enkf_cholesky import AnalysisEnKFCholesky

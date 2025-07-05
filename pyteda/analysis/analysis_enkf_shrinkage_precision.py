@@ -3,7 +3,7 @@
 import numpy as np
 from sklearn.linear_model import Ridge
 
-from .analysis import Analysis
+from .analysis_core import Analysis
 
 
 class AnalysisEnKFShrinkagePrecision(Analysis):

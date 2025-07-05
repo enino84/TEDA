@@ -1,6 +1,4 @@
 from abc import ABC, abstractmethod
-from scipy.integrate import odeint
-import numpy as np
 
 class Model(ABC):
     """Abstract class for models."""

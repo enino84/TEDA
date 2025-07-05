@@ -3,10 +3,10 @@ import numpy as np
 import logging
 import matplotlib.pyplot as plt
 
-from teda.simulation import Simulation
-from teda.models import Lorenz96
-from teda.background import Background
-from teda.analysis import (
+from pyteda.simulation import Simulation
+from pyteda.models import Lorenz96
+from pyteda.background import Background
+from pyteda.analysis import (
     AnalysisEnKF,
     AnalysisEnKFBLoc,
     AnalysisEnKFModifiedCholesky,
@@ -18,7 +18,7 @@ from teda.analysis import (
     AnalysisLETKF,
     AnalysisEnKFShrinkagePrecision
 )
-from teda.observation import Observation
+from pyteda.observation import Observation
 
 if __name__ == '__main__':
     model = Lorenz96()

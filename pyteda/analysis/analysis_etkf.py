@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from .analysis import Analysis
+from .analysis_core import Analysis
 
 class AnalysisETKF(Analysis):
     """

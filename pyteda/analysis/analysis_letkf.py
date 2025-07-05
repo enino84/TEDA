@@ -1,13 +1,13 @@
 import numpy as np
 
-from .analysis import Analysis
+from .analysis_core import Analysis
 
-class AnalysisLEnKF(Analysis):
-    """Analysis LEnKF"""
+class AnalysisLETKF(Analysis):
+    """Analysis Local Ensemble Transform Kalman Filter (LETKF)"""
 
     def __init__(self, model, r=1, **kwargs):
         """
-        Initialize the AnalysisLEnKF object.
+        Initialize the AnalysisLETKF object.
 
         Parameters
         ----------
@@ -19,33 +19,50 @@ class AnalysisLEnKF(Analysis):
         self.model = model
         self.r = r
 
-
-    def local_analysis_LEnKF(self, Xb, H, R, y, n, N, i, r):
+    def local_analysis_LETKF(self, Xb, H, R, y, n, N, i, r):
         # Subdomain decomposition
         si = [(i+j) % n for j in range(-r, r+1)]
-        Xbi = Xb[:, si]
-        Pbi = np.cov(Xbi.T)
-        yz = np.zeros((n,))
-        yz[H] = y
+        Xbi = Xb[:, si].T
+        xbi = np.mean(Xbi, axis=1).reshape(-1,1)
+        DXi = Xbi - xbi
 
         # Observations
         oi = np.array([s_i for s_i in si if s_i in H])  # Global index
         Hi = np.array([i for i, s_i in enumerate(si) if s_i in H])  # Local indexes
         mi = len(Hi)  # Number of local observations
+        yz = np.zeros((n,))
+        yz[H] = y
 
         if mi > 0:
-            yi = yz[oi]  # We take the local observations from the model state
+            yi = yz[oi].reshape(-1,1)  # We take the local observations from the model state
             Ri = (R[1, 1]) * np.eye(mi, mi)  # Local error covariance matrix - diagonal
-            Ysi = np.random.multivariate_normal(yi, Ri, N)  # Synthetic observations
-            Di = Ysi - Xbi[:, Hi]  # Innovation matrix (local)
+            di = yi - xbi[Hi]  # Innovation matrix (local)
+            di = di.reshape(-1,1)
 
-            # Local Assimilation
-            Pai = Ri + Pbi[Hi, :][:, Hi]  # Pa = R + H @ Pb @ H.T
-            Zai = np.linalg.solve(Pai, Di.T)
-            DXi = Pbi[:, Hi] @ Zai
-            Xai = Xbi + DXi.T
+            Qi = DXi[Hi, :]
+
+            projection_onto_ensemble_space = Qi.T @ np.linalg.solve(Ri, Qi)
+            Ui, Si, _ = np.linalg.svd(projection_onto_ensemble_space)
+            Pa_ens_invi = Ui @ np.diag(1 / (Si + 1)) @ Ui.T
+
+            rhsi = Qi.T @ np.linalg.solve(Ri, di)
+            dxai = DXi @ Pa_ens_invi @ rhsi
+            xai = xbi + dxai
+
+            Pat_sqrti = Ui @ np.diag(np.sqrt(1 / (Si + 1))) @ Ui.T
+
+            """
+            Pat = I - V.T @ np.linalg.solve(IN, V)
+            U, S, V = np.linalg.svd(Pat)
+            Pat_sqrt = U @ np.diag(np.sqrt(S)) @ U.T
+            """
+
+            DXA_inci = DXi @ Pat_sqrti
+            Xai = xai.reshape(-1, 1) + DXA_inci
+            Xai = Xai.T
+
         else:
-            Xai = Xbi
+            Xai = Xbi.T
 
         return Xai
 
@@ -74,8 +91,8 @@ class AnalysisLEnKF(Analysis):
 
         Xa = np.zeros((ensemble_size, n))  # Local analysis for each model component i
         for i in range(0, n):
-            Xai = self.local_analysis_LEnKF(Xb, H, R, y, n, ensemble_size, i, self.r)
-            Xa[:, i] = Xai[:, self.r]  #
+            Xai = self.local_analysis_LETKF(Xb, H, R, y, n, ensemble_size, i, self.r)
+            Xa[:, i] = Xai[:, self.r]
 
         self.Xa = Xa.T
 

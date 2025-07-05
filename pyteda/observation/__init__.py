@@ -5,6 +5,5 @@ Created on Thu Oct 22 00:43:05 2020
 @author: ElíasN
 """
 
-from .background import Background
-
+from .observation_core import Observation
 

@@ -1,6 +1,6 @@
 [project]
 name = "pyteda"
-version = "0.1.1"
+version = "0.1.7"
 description = "TEDA: Toy models and ensemble-based Data Assimilation methods for education and experimentation"
 readme = "README.md"
 requires-python = ">=3.7"
@@ -27,7 +27,7 @@ dependencies = [
 ]
 
 [tool.setuptools]
-packages = ["teda"]
+packages = ["pyteda"]
 
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]

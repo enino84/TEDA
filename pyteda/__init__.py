@@ -6,9 +6,9 @@ Created on Thu Oct 22 00:43:05 2020
 """
 
 # Expose main submodules as namespaces
-from . import simulation
-from . import analysis
-from . import background
 from . import models
+from . import background
 from . import observation
+from . import analysis
+from . import simulation
 
