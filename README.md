@@ -26,6 +26,11 @@ You can also use this BibTeX entry:
 }
 ```
 
+[![Cite TEDA](https://img.shields.io/badge/Cite-TEDA-blue.svg)](https://doi.org/10.1007/978-3-031-08760-8_60)
+
+---
+
+
 Introducing TEDA: The Premier Python Toolbox for Teaching Ensemble-based Data Assimilation
 
 ![Class Diagram](imgs/Class_TEDA.svg)
