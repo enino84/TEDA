@@ -3,7 +3,7 @@ import numpy as np
 import logging
 import matplotlib.pyplot as plt
 
-from teda import Simulation
+from teda.simulation import Simulation
 from teda.models import Lorenz96
 from teda.background import Background
 from teda.analysis import (

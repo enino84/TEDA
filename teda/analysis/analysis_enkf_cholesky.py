@@ -3,7 +3,7 @@
 import numpy as np
 import scipy as sci
 
-from analysis.analysis import Analysis
+from .analysis import Analysis
 
 
 class AnalysisEnKFCholesky(Analysis):

@@ -2,7 +2,7 @@
 
 from scipy.integrate import odeint
 import numpy as np
-from models.model import Model
+from .model import Model
 
 class Lorenz96(Model):
     """Implementation of the Lorenz 96 model"""

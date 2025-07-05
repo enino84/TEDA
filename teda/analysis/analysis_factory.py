@@ -1,13 +1,13 @@
-from analysis.analysis_enkf import AnalysisEnKF
-from analysis.analysis_enkf_bloc import AnalysisEnKFBLoc
-from analysis.analysis_enkf_modified_cholesky import AnalysisEnKFModifiedCholesky
-from analysis.analysis_enkf_cholesky import AnalysisEnKFCholesky
-from analysis.analysis_enkf_naive import AnalysisEnKFNaive
-from analysis.analysis_lenkf import AnalysisLEnKF
-from analysis.analysis_ensrf import AnalysisEnSRF
-from analysis.analysis_etkf import AnalysisETKF
-from analysis.analysis_letkf import AnalysisLETKF
-from analysis.analysis_enkf_shrinkage_precision import AnalysisEnKFShrinkagePrecision
+from .analysis_enkf import AnalysisEnKF
+from .analysis_enkf_bloc import AnalysisEnKFBLoc
+from .analysis_enkf_modified_cholesky import AnalysisEnKFModifiedCholesky
+from .analysis_enkf_cholesky import AnalysisEnKFCholesky
+from .analysis_enkf_naive import AnalysisEnKFNaive
+from .analysis_lenkf import AnalysisLEnKF
+from .analysis_ensrf import AnalysisEnSRF
+from .analysis_etkf import AnalysisETKF
+from .analysis_letkf import AnalysisLETKF
+from .analysis_enkf_shrinkage_precision import AnalysisEnKFShrinkagePrecision
 
 class AnalysisFactory:
     

@@ -119,6 +119,43 @@ plt.show()
 
 See [`examples/basic_template.py`](examples/basic_template.py) for a complete simulation workflow.
 
+Perfecto, aquí tienes un bloque listo para agregar a tu `README.md`, que explica cómo instalar los requisitos y ejecutar el ejemplo básico con buenas prácticas (virtualenv + modo módulo):
+
+---
+
+### 🚀 Installation and Quick Start
+
+We recommend using a virtual environment:
+
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+Install the required dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+> Or, if you're developing TEDA locally:
+
+```bash
+pip install -e .
+```
+
+---
+
+### ▶️ Run the basic example
+
+Once installed, you can run the full example with:
+
+```bash
+python -m examples.basic_template
+```
+
+This will initialize the Lorenz96 model, run an ensemble-based data assimilation simulation, and display the log-relative errors for both the background and analysis states.
+
 
 ## Supported methods
 

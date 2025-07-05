@@ -1,6 +1,6 @@
 import numpy as np
 
-from analysis.analysis import Analysis
+from .analysis import Analysis
 
 class AnalysisLETKF(Analysis):
     """Analysis Local Ensemble Transform Kalman Filter (LETKF)"""

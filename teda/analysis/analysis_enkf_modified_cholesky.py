@@ -3,7 +3,7 @@
 import numpy as np
 from sklearn.linear_model import Ridge
 
-from analysis.analysis import Analysis
+from .analysis import Analysis
 
 
 class AnalysisEnKFModifiedCholesky(Analysis):
