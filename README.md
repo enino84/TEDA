@@ -97,7 +97,7 @@ This will initialize the Lorenz96 model, run an ensemble-based data assimilation
 
 The `pyteda` package supports a wide range of ensemble-based data assimilation methods including EnKF, LETKF, ETKF, and shrinkage-based filters. All methods are accessible via the `AnalysisFactory`.
 
-📄 See [Supported Methods](docs/api_reference.md) for a full list and references.
+📄 See [Supported Methods](docs/index.md) for a full list and references.
 
 ---
 
