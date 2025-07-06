@@ -177,23 +177,29 @@ class Analysis(ABC):
 
 TEDA is designed to be easily extensible. You can add your own data assimilation method by implementing a custom class that inherits from the abstract `Analysis` class.
 
-### 1. Define a New Analysis Class
 
-Create a new Python file (e.g., `my_analysis.py`) and define a class that inherits from `pyteda.analysis.analysis_base.Analysis`:
+### ✅ Step 1: Define and register your custom method
+
+Save this file as `user_methods/my_enkf.py`:
 
 ```python
-# my_analysis.py
-import numpy as np
-from pyteda.analysis.analysis_base import Analysis
+# user_methods/my_enkf.py
 
-class MyCustomAnalysis(Analysis):
-    def __init__(self, param=1):
-        self.param = param
-        self.Xa = None
+from pyteda.analysis.analysis_core import Analysis
+from pyteda.analysis.registry import register_analysis
+
+@register_analysis("my_enkf")  # ✅ Decorator to register the method
+class MyEnKF(Analysis):
+
+    def __init__(self, **kwargs):
+      pass
 
     def perform_assimilation(self, background, observation):
-        # Custom assimilation logic
-        self.Xa = background.ensemble  # For demonstration, no change
+        # Simple assimilation: apply scaled innovation
+        HXb = observation.H @ background.Xb
+        innovations = observation.y[:, None] - HXb
+        self.Xa = background.Xb + 0.1 * (observation.H.T @ innovations)
+        return self.Xa
 
     def get_analysis_state(self):
         return self.Xa.mean(axis=1)
@@ -202,7 +208,8 @@ class MyCustomAnalysis(Analysis):
         return self.Xa
 
     def get_error_covariance(self):
-        return np.cov(self.Xa)
+        Xa_mean = self.Xa.mean(axis=1, keepdims=True)
+        return ((self.Xa - Xa_mean) @ (self.Xa - Xa_mean).T) / (self.Xa.shape[1] - 1)
 
     def inflate_ensemble(self, inflation_factor):
         mean = self.Xa.mean(axis=1, keepdims=True)
@@ -211,27 +218,45 @@ class MyCustomAnalysis(Analysis):
 
 ---
 
-### 2. Save It Locally
+### 📁 Step 2: Use your method via the factory
 
-Save your file in any location accessible from your script or notebook.
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+from pyteda.simulation import Simulation
+from pyteda.models import Lorenz96
+from pyteda.background import Background
+from pyteda.observation import Observation
+from pyteda.analysis.analysis_factory import AnalysisFactory
+
+# 🔄 Import your custom class to trigger the registration
+import user_methods.my_enkf
+
+# Setup
+model = Lorenz96()
+background = Background(model, ensemble_size=20)
+observation = Observation(m=32, std_obs=0.01)
+params = {'obs_freq': 0.1, 'obs_times': 10, 'inf_fact': 1.04}
+
+# ✅ Use your registered custom method via factory
+analysis = AnalysisFactory("my_enkf", model=model).create_analysis()
+
+# Run simulation
+sim = Simulation(model, background, analysis, observation, params=params)
+sim.run()
+
+# Visualize error
+errb, erra = sim.get_errors()
+plt.figure(figsize=(10, 6))
+plt.plot(np.log10(errb), '-ob', label='Background Error')
+plt.plot(np.log10(erra), '-or', label='Analysis Error')
+plt.title("Custom Method (MyEnKF) – Log10 Errors")
+plt.legend()
+plt.grid(True)
+plt.show()
+```
 
 ---
 
-### 3. Register the Method Dynamically
-
-Use the TEDA registry to make your method available in the `AnalysisFactory`:
-
-```python
-from pyteda.analysis.registry import register_analysis_from_file
-register_analysis_from_file('my_analysis.py', 'my-analysis')
-```
-
-You can now use it as any other method:
-
-```python
-from pyteda.analysis.analysis_factory import AnalysisFactory
-
-analysis = AnalysisFactory('my-analysis', param=42).create_analysis()
-```
-
-
+## More examples here [Google Colab](https://colab.research.google.com/drive/1Ts67iE19KtMuWd0CF8_GGGqE3wRQjC2G?usp=sharing)
