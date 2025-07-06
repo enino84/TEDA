@@ -23,7 +23,7 @@ class AnalysisLETKF(Analysis):
 
     def local_analysis_LETKF(self, Xb, H, R, y, n, N, i, r):
         # Subdomain decomposition
-        si = [(i+j) % n for j in range(-r, r+1)]
+        si = self.model.get_ngb(i, r) #[(i+j) % n for j in range(-r, r+1)]
         Xbi = Xb[:, si].T
         xbi = np.mean(Xbi, axis=1).reshape(-1,1)
         DXi = Xbi - xbi

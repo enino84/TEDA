@@ -24,7 +24,7 @@ class AnalysisLEnKF(Analysis):
 
     def local_analysis_LEnKF(self, Xb, H, R, y, n, N, i, r):
         # Subdomain decomposition
-        si = [(i+j) % n for j in range(-r, r+1)]
+        si = si = self.model.get_ngb(i, r) #[(i+j) % n for j in range(-r, r+1)]
         Xbi = Xb[:, si]
         Pbi = np.cov(Xbi.T)
         yz = np.zeros((n,))
