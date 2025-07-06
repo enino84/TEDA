@@ -1,6 +1,6 @@
 [project]
 name = "pyteda"
-version = "0.1.7"
+version = "0.2.0"
 description = "TEDA: Toy models and ensemble-based Data Assimilation methods for education and experimentation"
 readme = "README.md"
 requires-python = ">=3.7"
@@ -26,8 +26,9 @@ dependencies = [
   "scikit-learn"
 ]
 
-[tool.setuptools]
-packages = ["pyteda"]
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pyteda*"]
 
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]

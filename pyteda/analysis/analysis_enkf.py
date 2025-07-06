@@ -3,8 +3,9 @@
 import numpy as np
 
 from .analysis_core import Analysis
+from .registry import register_analysis
 
-
+@register_analysis("enkf")
 class AnalysisEnKF(Analysis):
     """
     Analysis EnKF full covariance matrix

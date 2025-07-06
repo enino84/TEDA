@@ -4,8 +4,9 @@ import numpy as np
 import scipy as sci
 
 from .analysis_core import Analysis
+from .registry import register_analysis
 
-
+@register_analysis("enkf-cholesky")
 class AnalysisEnKFCholesky(Analysis):
     """EnKF implementation Cholesky (ensemble space)
   

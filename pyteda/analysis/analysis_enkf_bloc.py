@@ -1,7 +1,9 @@
 import numpy as np
 
 from .analysis_core import Analysis
+from .registry import register_analysis
 
+@register_analysis("enkf-b-loc")
 class AnalysisEnKFBLoc(Analysis):
     """Analysis EnKF B-Loc"""
 

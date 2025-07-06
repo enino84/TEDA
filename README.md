@@ -1,46 +1,4 @@
-# TEDA - A Computational Toolbox for Teaching Ensemble Based Data Assimilation
-
-### 📚 Citation
-
-If you use **TEDA** in your teaching, research, or publications, please cite the following paper:
-
-> **Nino-Ruiz, E.D., Valbuena, S.R.** (2022).
-> *TEDA: A Computational Toolbox for Teaching Ensemble Based Data Assimilation*.
-> In: Groen, D., de Mulatier, C., Paszynski, M., Krzhizhanovskaya, V.V., Dongarra, J.J., Sloot, P.M.A. (eds) **Computational Science – ICCS 2022**.
-> Lecture Notes in Computer Science, vol 13353. Springer, Cham.
-> [https://doi.org/10.1007/978-3-031-08760-8\_60](https://doi.org/10.1007/978-3-031-08760-8_60)
-
-You can also use this BibTeX entry:
-
-```bibtex
-@inproceedings{nino2022teda,
-  title={TEDA: A Computational Toolbox for Teaching Ensemble Based Data Assimilation},
-  author={Nino-Ruiz, Elias D. and Valbuena, Sebastian Racedo},
-  booktitle={Computational Science – ICCS 2022},
-  series={Lecture Notes in Computer Science},
-  volume={13353},
-  pages={787--801},
-  year={2022},
-  publisher={Springer, Cham},
-  doi={10.1007/978-3-031-08760-8_60}
-}
-```
-
-[![Cite TEDA](https://img.shields.io/badge/Cite-TEDA-blue.svg)](https://doi.org/10.1007/978-3-031-08760-8_60)
-[![PyPI version](https://badge.fury.io/py/pyteda.svg)](https://pypi.org/project/pyteda/)
-
-### 📦 Installation
-
-You can install **pyteda** directly from PyPI:
-
-```bash
-pip install pyteda
-```
----
-
-## Introducing TEDA: The Premier Python Toolbox for Teaching Ensemble-based Data Assimilation
-
-![Class Diagram](imgs/Class_TEDA.svg)
+# 🧠 TEDA – Toolbox for Ensemble Data Assimilation
 
 We are thrilled to present TEDA, a cutting-edge Python toolbox designed to facilitate the teaching and learning of ensemble-based data assimilation (DA). TEDA caters to the needs of educators and learners alike, offering a comprehensive platform to explore the captivating world of meteorological anomalies, climate change, and DA methodologies.
 
@@ -66,119 +24,60 @@ Currently, TEDA includes the **Lorenz 96 model** (40 variables), a well-known be
 
 > 📌 *Support for other classic chaotic systems like the Duffing equation and Lorenz 63 may be added in future versions.*
 
+---
 
+## 📦 Installation
 
-## How easy is to use it?
-
-Choose the desired method from the pool of available methods:
-
-```python
-from analysis.analysis_enkf_modified_cholesky import AnalysisEnKFModifiedCholesky
-```
-
-Select a model to perform the simulations:
-
-```python
-model = Lorenz96()
-```
-
-Create a background object with the desired parameters:
-
-```python
-background = Background(model, ensemble_size=20)
-```
-
-Create an analysis object with the desired method and its parameters + the chosen model:
-
-```python
-analysis = AnalysisEnKFModifiedCholesky(model, r=2)
-```
-
-Define the observation parameters:
-
-```python
-observation = Observation(m=32, std_obs=0.01)
-```
-
-Set up the parameters for the simulation:
-
-```python
-params = {'obs_freq': 0.1, 'obs_times': 10, 'inf_fact': 1.04}
-
-simulation = Simulation(
-    model,
-    background,
-    analysis,
-    observation,
-    params=params,
-    log_level=None  # set to None to disable logging
-)
-```
-
-and then, run the simulation!
-
-```python
-simulation.run()
-```
-
-
-### ✨ Logging (Optional)
-
-> 💡 **Note:** If you want to enable logs (e.g., for debugging or monitoring), just pass a `log_level` when creating the simulation.
-> To **disable logs**, use `log_level=None`.
-
-```python
-import logging
-
-simulation = Simulation(
-    model,
-    background,
-    analysis,
-    observation,
-    params=params,
-    log_level=logging.INFO  # set to None to disable logging
-)
-```
-
-You can then request the backgound and analysis errors per assimilation step for plotting purposes or statistical computations:
-
-```python
-import matplotlib.pyplot as plt
-
-errb, erra = simulation.get_errors()
-
-plt.figure(figsize=(12, 10))
-plt.plot(np.log10(errb),'-ob')
-plt.plot(np.log10(erra),'-or')
-plt.show()
-```
-
-📁 Example usage
-
-See [`examples/basic_template.py`](examples/basic_template.py) for a complete simulation workflow.
+Aquí tienes una versión mejor redactada y estructurada para la sección de instalación y uso rápido:
 
 ---
 
-### 🚀 Installation and Quick Start
+## 🚀 Installation and Quick Start
 
-We recommend using a virtual environment:
+### ✅ From PyPI
+
+To install the latest stable version:
+
+```bash
+pip install pyteda
+```
+
+### 🧪 From Source (for development)
+
+Clone the repository and install in editable mode:
+
+```bash
+git clone https://github.com/your-username/pyteda.git
+cd pyteda
+pip install -e .
+```
+
+### 🛠️ Recommended Setup: Virtual Environment
+
+We suggest using a virtual environment to manage dependencies:
 
 ```bash
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-Install the required dependencies:
+Install all required dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-> Or, if you're developing TEDA locally:
+---
+
+## 📁 Example Usage
+
+You can run a complete simulation workflow using:
 
 ```bash
-pip install -e .
+python examples/basic_template.py
 ```
+
+Or explore the file directly: [`examples/basic_template.py`](examples/basic_template.py)
 
 ---
 
@@ -192,133 +91,84 @@ python -m examples.basic_template
 
 This will initialize the Lorenz96 model, run an ensemble-based data assimilation simulation, and display the log-relative errors for both the background and analysis states.
 
+---
 
-## Supported methods
+### Supported Methods
 
+The `pyteda` package supports a wide range of ensemble-based data assimilation methods including EnKF, LETKF, ETKF, and shrinkage-based filters. All methods are accessible via the `AnalysisFactory`.
 
-| Class                          | Description                                      | Reference                                                  |
-| ------------------------------ | ------------------------------------------------ | ---------------------------------------------------------- |
-| AnalysisEnKFShrinkagePrecision | Compute the precision matrix for EnKF Shrinkage Precision. | Nino-Ruiz, Elias D., and Adrian Sandu. "Ensemble Kalman filter implementations based on shrinkage covariance matrix estimation." Ocean Dynamics 65 (2015): 1423-1439.                                                        |
-| AnalysisEnKFModifiedCholesky   | Compute the precision matrix for EnKF Modified Cholesky. | Nino-Ruiz, Elias D., Adrian Sandu, and Xinwei Deng. "An ensemble Kalman filter implementation based on modified Cholesky decomposition for inverse covariance matrix estimation." SIAM Journal on Scientific Computing 40.2 (2018): A867-A886.                                                       |
-| AnalysisEnKFNaive              | Perform assimilation using Naive EnKF method.    | Nino Ruiz, Elias D., Adrian Sandu, and Jeffrey Anderson. "An efficient implementation of the ensemble Kalman filter based on an iterative Sherman–Morrison formula." Statistics and Computing 25 (2015): 561-577.                                                       |
-| AnalysisEnSRF                  | Perform assimilation using EnSRF method.          | Tippett, Michael K., et al. "Ensemble square root filters." Monthly weather review 131.7 (2003): 1485-1490.                                                     |
-| AnalysisETKF                   | Perform assimilation using ETKF method.           | Bishop, Craig H., Brian J. Etherton, and Sharanya J. Majumdar. "Adaptive sampling with the ensemble transform Kalman filter. Part I: Theoretical aspects." Monthly weather review 129.3 (2001): 420-436.                                                        |
-| AnalysisLETKF                  | Perform assimilation using LETKF method.          | Hunt, Brian R., Eric J. Kostelich, and Istvan Szunyogh. "Efficient data assimilation for spatiotemporal chaos: A local ensemble transform Kalman filter." Physica D: Nonlinear Phenomena 230.1-2 (2007): 112-126.                                                      |
-| AnalysisLEnKF                   | Perform assimilation using LEnKF method.          |Ott, Edward, et al. "A local ensemble Kalman filter for atmospheric data assimilation." Tellus A: Dynamic Meteorology and Oceanography 56.5 (2004): 415-428.                                                    |
-| AnalysisEnKFBLoc               | Perform assimilation using EnKF B-Loc method.     | Greybush, Steven J., et al. "Balance and ensemble Kalman filter localization techniques." Monthly Weather Review 139.2 (2011): 511-522.                                                      |
-| AnalysisEnKFCholesky           | Perform assimilation using EnKF Cholesky decomposition. | Mandel, Jan. Efficient implementation of the ensemble Kalman filter. University of Colorado at Denver and Health Sciences Center, Center for Computational Mathematics, 2006.                                                        |
-| AnalysisEnKF                    | Perform assimilation using EnKF full covariance matrix. | Evensen, Geir. Data assimilation: the ensemble Kalman filter. Vol. 2. Berlin: springer, 2009.                                                        |
-| Analysis                        | Perform assimilation given background and observations. | Abstract class to define general methods for all assimilation steps.                                                          |
+📄 See [Supported Methods](docs/api_reference.md) for a full list and references.
 
-**Analysis (Abstract class for analysis methods)**
+---
 
-| Method                 | Description                                      |
-| ---------------------- | ------------------------------------------------ |
-| perform_assimilation   | Perform the assimilation step given the background and observations. It takes the following parameters: <br>- **background**: Background object representing the background ensemble or state.<br>- **observation**: Observation object representing the observation used for assimilation. |
-| get_analysis_state     | Return the computed column mean of the ensemble Xa. It doesn't take any parameters. |
-| get_ensemble           | Return the ensemble Xa. It doesn't take any parameters. |
-| get_error_covariance   | Return the computed covariance matrix of the ensemble Xa. It doesn't take any parameters. |
-| inflate_ensemble       | Compute the new ensemble Xa given the inflation factor. It takes the following parameter: <br>- **inflation_factor**: Double number indicating the inflation factor to be applied to the ensemble. |
+## 🚀 Quickstart
 
-**AnalysisEnKF (Analysis EnKF full covariance matrix)**
+Here's a minimal example using the **LETKF** method with the built-in Lorenz96 model:
 
-| Method                 | Description                                      |
-| ---------------------- | ------------------------------------------------ |
-| perform_assimilation   | Perform the assimilation step given the background and observations. It takes the following parameters: <br>- **background**: Background object representing the background ensemble or state.<br>- **observation**: Observation object representing the observation used for assimilation. |
-| get_analysis_state     | Return the computed column mean of the ensemble Xa. It doesn't take any parameters. |
-| get_ensemble           | Return the ensemble Xa. It doesn't take any parameters. |
-| get_error_covariance   | Return the computed covariance matrix of the ensemble Xa. It doesn't take any parameters. |
-| inflate_ensemble       | Compute the new ensemble Xa given the inflation factor. It takes the following parameter: <br>- **inflation_factor**: Double number indicating the inflation factor to be applied to the ensemble. |
+```python
+from pyteda.simulation import Simulation
+from pyteda.models import Lorenz96
+from pyteda.background import Background
+from pyteda.observation import Observation
+from pyteda.analysis.analysis_factory import AnalysisFactory
 
-**AnalysisEnKFBLoc (Analysis EnKF B-Loc)**
+model = Lorenz96()
+background = Background(model, ensemble_size=20)
+observation = Observation(m=32, std_obs=0.01)
 
-| Method                 | Description                                      |
-| ---------------------- | ------------------------------------------------ |
-| perform_assimilation   | Perform the assimilation step given the background and observations. It takes the following parameters: <br>- **background**: Background object representing the background ensemble or state.<br>- **observation**: Observation object representing the observation used for assimilation. |
-| get_analysis_state     | Return the computed column mean of the ensemble Xa. It doesn't take any parameters. |
-| get_ensemble           | Return the ensemble Xa. It doesn't take any parameters. |
-| get_error_covariance   | Return the computed covariance matrix of the ensemble Xa. It doesn't take any parameters. |
-| inflate_ensemble       | Compute the new ensemble Xa given the inflation factor. It takes the following parameter: <br>- **inflation_factor**: Double number indicating the inflation factor to be applied to the ensemble. |
+analysis = AnalysisFactory("letkf", model=model).create_analysis()
 
-**AnalysisEnKFCholesky (EnKF implementation Cholesky)**
+params = {'obs_freq': 0.1, 'obs_times': 10, 'inf_fact': 1.04}
+sim = Simulation(model, background, analysis, observation, params=params)
+sim.run()
 
-| Method                 | Description                                      |
-| ---------------------- | ------------------------------------------------ |
-| perform_assimilation   | Perform the assimilation step given the background and observations. It takes the following parameters: <br>- **background**: Background object representing the background ensemble or state.<br>- **observation**: Observation object representing the observation used for assimilation. |
-| get_analysis_state     | Return the computed column mean of the ensemble Xa. It doesn't take any parameters. |
-| get_ensemble           | Return the ensemble Xa. It doesn't take any parameters. |
-| get_error_covariance   | Return the computed covariance matrix of the ensemble Xa. It doesn't take any parameters. |
-| inflate_ensemble       | Compute the new ensemble Xa given the inflation factor. It takes the following parameter: <br>- **inflation_factor**: Double number indicating the inflation factor to be applied to the ensemble. |
+errb, erra = sim.get_errors()
+```
 
-**AnalysisEnKFModifiedCholesky (Analysis EnKF Modified Cholesky decomposition)**
+📈 For visualization and full working examples, check the [`examples/`](examples/) folder.
 
-| Method                 | Description                                      |
-| ---------------------- | ------------------------------------------------ |
-| get_precision_matrix   | Returns the computed precision matrix. It takes the following parameters: <br>- **DX**: Deviation matrix.<br>- **regularization_factor**: Value used as alpha in the ridge model. |
-| perform_assimilation   | Perform the assimilation step given the background and observations. It takes the following parameters: <br>- **background**: Background object representing the background ensemble or state.<br>- **observation**: Observation object representing the observation used for assimilation. |
-| get_analysis_state     | Return the computed column mean of the ensemble Xa. It doesn't take any parameters. |
-| get_ensemble           | Return the ensemble Xa. It doesn't take any parameters. |
-| get_error_covariance   | Return the computed covariance matrix of the ensemble Xa. It doesn't take any parameters. |
-| inflate_ensemble       | Compute the new ensemble Xa given the inflation factor. It takes the following parameter: <br>- **inflation_factor**: Double number indicating the inflation factor to be applied to the ensemble. |
+---
 
-**AnalysisEnKFNaive (Analysis EnKF Naive)**
+## 🎓 Citation
 
-| Method                 | Description                                      |
-| ---------------------- | ------------------------------------------------ |
-| perform_assimilation   | Perform the assimilation step given the background and observations. It takes the following parameters: <br>- **background**: Background object representing the background ensemble or state.<br>- **observation**: Observation object representing the observation used for assimilation. |
-| get_analysis_state     | Return the computed column mean of the ensemble Xa. It doesn't take any parameters. |
-| inflate_ensemble       | Compute the new ensemble Xa given the inflation factor. It takes the following parameter: <br>- **inflation_factor**: Double number indicating the inflation factor to be applied to the ensemble. |
-| get_ensemble           | Return the ensemble Xa. It doesn't take any parameters. |
-| get_error_covariance   | Return the computed covariance matrix of the ensemble Xa. It doesn't take any parameters. |
+If you use **TEDA** in your teaching or research, please cite:
 
-**AnalysisEnKFShrinkagePrecision (Analysis EnKF Shrinkage Precision)**
+**Nino-Ruiz, E.D., Valbuena, S.R. (2022)**
+*TEDA: A Computational Toolbox for Teaching Ensemble Based Data Assimilation*.
+[📖 ICCS 2022, Springer](https://doi.org/10.1007/978-3-031-08760-8_60)
 
-| Method                 | Description                                      |
-| ---------------------- | ------------------------------------------------ |
-| get_precision_matrix   | Returns the computed precision matrix. It takes the following parameters: <br>- **DX**: Deviation matrix.<br>- **regularization_factor**: Value used as alpha in the ridge model. |
-| perform_assimilation   | Perform the assimilation step given the background and observations. It takes the following parameters: <br>- **background**: Background object representing the background ensemble or state.<br>- **observation**: Observation object representing the observation used for assimilation. |
-| get_analysis_state     | Return the computed column mean of the ensemble Xa. It doesn't take any parameters. |
-| get_ensemble           | Return the ensemble Xa. It doesn't take any parameters. |
-| get_error_covariance   | Return the computed covariance matrix of the ensemble Xa. It doesn't take any parameters. |
-| inflate_ensemble       | Compute the new ensemble Xa given the inflation factor. It takes the following parameter: <br>- **inflation_factor**: Double number indicating the inflation factor to be applied to the ensemble. |
+```bibtex
+@inproceedings{nino2022teda,
+  title={TEDA: A Computational Toolbox for Teaching Ensemble Based Data Assimilation},
+  author={Nino-Ruiz, Elias D. and Valbuena, Sebastian Racedo},
+  booktitle={Computational Science – ICCS 2022},
+  series={Lecture Notes in Computer Science},
+  volume={13353},
+  pages={787--801},
+  year={2022},
+  publisher={Springer, Cham},
+  doi={10.1007/978-3-031-08760-8_60}
+}
+```
 
-**AnalysisEnSRF (Analysis EnSRF)**
+---
 
-| Method                 | Description                                      |
-| ---------------------- | ------------------------------------------------ |
-| perform_assimilation   | Perform the assimilation step given the background and observations. It takes the following parameters: <br>- **background**: Background object representing the background ensemble or state.<br>- **observation**: Observation object representing the observation used for assimilation. |
-| get_analysis_state     | Return the computed column mean of the ensemble Xa. It doesn't take any parameters. |
-| get_ensemble           | Return the ensemble Xa. It doesn't take any parameters. |
-| get_error_covariance   | Return the computed covariance matrix of the ensemble Xa. It doesn't take any parameters. |
-| inflate_ensemble       | Compute the new ensemble Xa given the inflation factor. It takes the following parameter: <br>- **inflation_factor**: Double number indicating the inflation factor to be applied to the ensemble. |
+## 📚 More Resources
 
-**AnalysisETKF (Analysis Ensemble Transform Kalman Filter (ETKF))**
+* 🧪 Explore [examples/](examples/) to try different filters and models.
+* 📖 Full documentation available in the `docs/` folder.
+* ➕ Want to add your own method? TEDA supports [custom DA methods via registry](docs/custom_methods.md).
 
-| Method                 | Description                                      |
-| ---------------------- | ------------------------------------------------ |
-| perform_assimilation   | Perform the assimilation step given the background and observations. It takes the following parameters: <br>- **background**: Background object representing the background ensemble or state.<br>- **observation**: Observation object representing the observation used for assimilation. |
-| get_analysis_state     | Return the computed column mean of the ensemble Xa. It doesn't take any parameters. |
-| get_ensemble           | Return the ensemble Xa. It doesn't take any parameters. |
-| get_error_covariance   | Return the computed covariance matrix of the ensemble Xa. It doesn't take any parameters. |
-| inflate_ensemble       | Compute the new ensemble Xa given the inflation factor. It takes the following parameter: <br>- **inflation_factor**: Double number indicating the inflation factor to be applied to the ensemble. |
+---
 
-**AnalysisLEnKF (Analysis LEnKF)**
+[![PyPI version](https://badge.fury.io/py/pyteda.svg)](https://pypi.org/project/pyteda/)
+[![Cite TEDA](https://img.shields.io/badge/Cite-TEDA-blue.svg)](https://doi.org/10.1007/978-3-031-08760-8_60)
 
-| Method                 | Description                                      |
-| ---------------------- | ------------------------------------------------ |
-| perform_assimilation   | Perform the assimilation step given the background and observations. It takes the following parameters: <br>- **background**: Background object representing the background ensemble or state.<br>- **observation**: Observation object representing the observation used for assimilation. |
-| get_analysis_state     | Return the computed column mean of the ensemble Xa. It doesn't take any parameters. |
-| inflate_ensemble       | Compute the new ensemble Xa given the inflation factor. It takes the following parameter: <br>- **inflation_factor**: Double number indicating the inflation factor to be applied to the ensemble. |
-| get_ensemble           | Return the ensemble Xa. It doesn't take any parameters. |
-| get_error_covariance   | Return the computed covariance matrix of the ensemble Xa. It doesn't take any parameters. |
+---
 
-**AnalysisLETKF (Analysis Local Ensemble Transform Kalman Filter (LETKF))**
+## Developed by
 
-| Method                 | Description                                      |
-| ---------------------- | ------------------------------------------------ |
-| perform_assimilation   | Perform the assimilation step given the background and observations. It takes the following parameters: <br>- **background**: Background object representing the background ensemble or state.<br>- **observation**: Observation object representing the observation used for assimilation. |
-| get_analysis_state     | Return the computed column mean of the ensemble Xa. It doesn't take any parameters. |
-| inflate_ensemble       | Compute the new ensemble Xa given the inflation factor. It takes the following parameter: <br>- **inflation_factor**: Double number indicating the inflation factor to be applied to the ensemble. |
-| get_ensemble           | Return the ensemble Xa. It doesn't take any parameters. |
-| get_error_covariance   | Return the computed covariance matrix of the ensemble Xa. It doesn't take any parameters. |
+* Elías D. Niño-Ruiz
+* [https://enino84.github.io/](https://enino84.github.io/)
+* elias.d.nino@gmail.com
 

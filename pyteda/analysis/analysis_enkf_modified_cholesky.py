@@ -4,8 +4,9 @@ import numpy as np
 from sklearn.linear_model import Ridge
 
 from .analysis_core import Analysis
+from .registry import register_analysis
 
-
+@register_analysis("enkf-modified-cholesky")
 class AnalysisEnKFModifiedCholesky(Analysis):
     """Analysis EnKF Modified Cholesky decomposition
     
