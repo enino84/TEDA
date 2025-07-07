@@ -24,6 +24,7 @@ class AnalysisLETKF(Analysis):
     def local_analysis_LETKF(self, Xb, H, R, y, n, N, i, r):
         # Subdomain decomposition
         si = self.model.get_ngb(i, r) #[(i+j) % n for j in range(-r, r+1)]
+        center_index = np.where(si == i)[0][0]  # Index of the center element in the subdomain
         Xbi = Xb[:, si].T
         xbi = np.mean(Xbi, axis=1).reshape(-1,1)
         DXi = Xbi - xbi
@@ -66,7 +67,7 @@ class AnalysisLETKF(Analysis):
         else:
             Xai = Xbi.T
 
-        return Xai
+        return Xai, center_index
 
     def perform_assimilation(self, background, observation):
         """
@@ -93,8 +94,9 @@ class AnalysisLETKF(Analysis):
 
         Xa = np.zeros((ensemble_size, n))  # Local analysis for each model component i
         for i in range(0, n):
-            Xai = self.local_analysis_LETKF(Xb, H, R, y, n, ensemble_size, i, self.r)
-            Xa[:, i] = Xai[:, self.r]
+            Xai, center_index = self.local_analysis_LETKF(Xb, H, R, y, n, ensemble_size, i, self.r)
+            Xa[:, i] = Xai[:, center_index]
+            #Xa[:, i] = Xai[:, self.r]
 
         self.Xa = Xa.T
 

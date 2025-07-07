@@ -8,16 +8,6 @@ class Simulation:
     def __init__(self, model, background, analysis, observation,
                  params={'obs_freq': 0.1, 'obs_times': 15, 'inf_fact': 1.04},
                  log_level=logging.INFO):
-        """
-        Parameters
-        ----------
-        model : Model object
-        background : Background object
-        analysis : Analysis object
-        observation : Observation object
-        params : dict
-        log_level : logging level or None to disable logging
-        """
         self.model = model
         self.background = background
         self.analysis = analysis
@@ -25,6 +15,16 @@ class Simulation:
         self.obs_freq = params['obs_freq']
         self.obs_times = params['obs_times']
         self.inf_fact = params['inf_fact']
+        self.store_back_state = params.get('store_back_state', False)
+        self.store_post_state = params.get('store_post_state', False)
+        self.store_ref_state = params.get('store_ref_state', False)
+        self.store_state_at = params.get('store_state_at', [])  # new: which time steps to store
+
+        # Optional storage for state snapshots
+        self.background_states = [] if self.store_back_state else None
+        self.analysis_states = [] if self.store_post_state else None
+        self.truth_states = [] if self.store_ref_state else None
+        self._stored_indices = []  # new: actual time indices saved
 
         # Setup logging
         self.logger = logging.getLogger("Simulation")
@@ -63,12 +63,24 @@ class Simulation:
                 self.logger.debug(f"Inflated ensemble with factor {self.inf_fact}")
 
             xak = self.analysis.get_analysis_state()
-            self.error_a[k] = self.relative_error(xtk, xak)
             xbk = self.background.get_background_state()
+
+            self.error_a[k] = self.relative_error(xtk, xak)
             self.error_b[k] = self.relative_error(xtk, xbk)
 
             self.logger.debug(f"Background error: {self.error_b[k]:.4f}, Analysis error: {self.error_a[k]:.4f}")
 
+            # ✅ Only store if current step is in store_state_at
+            if k in self.store_state_at:
+                if self.store_back_state:
+                    self.background_states.append(xbk.copy())
+                if self.store_post_state:
+                    self.analysis_states.append(xak.copy())
+                if self.store_ref_state:
+                    self.truth_states.append(xtk.copy())
+                self._stored_indices.append(k)
+
+            # Forecast step
             Xbk = self.background.forecast_step(Xak, T)
             xtk = self.model.propagate(xtk, T)
 
@@ -77,3 +89,12 @@ class Simulation:
     def get_errors(self):
         """Returns the background and analysis error vectors."""
         return self.error_b, self.error_a
+
+    def get_saved_states(self):
+        """Returns stored states as a dictionary."""
+        return {
+            "background": self.background_states,
+            "analysis": self.analysis_states,
+            "truth": self.truth_states,
+            "steps": self._stored_indices
+        }

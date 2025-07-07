@@ -25,6 +25,7 @@ class AnalysisLEnKF(Analysis):
     def local_analysis_LEnKF(self, Xb, H, R, y, n, N, i, r):
         # Subdomain decomposition
         si = si = self.model.get_ngb(i, r) #[(i+j) % n for j in range(-r, r+1)]
+        center_index = np.where(si == i)[0][0]  # Index of the center element in the subdomain
         Xbi = Xb[:, si]
         Pbi = np.cov(Xbi.T)
         yz = np.zeros((n,))
@@ -49,7 +50,7 @@ class AnalysisLEnKF(Analysis):
         else:
             Xai = Xbi
 
-        return Xai
+        return Xai, center_index  # Return the analysis state and the index of the center element in the subdomain
 
     def perform_assimilation(self, background, observation):
         """
@@ -76,8 +77,8 @@ class AnalysisLEnKF(Analysis):
 
         Xa = np.zeros((ensemble_size, n))  # Local analysis for each model component i
         for i in range(0, n):
-            Xai = self.local_analysis_LEnKF(Xb, H, R, y, n, ensemble_size, i, self.r)
-            Xa[:, i] = Xai[:, self.r]  #
+            Xai, center_index = self.local_analysis_LEnKF(Xb, H, R, y, n, ensemble_size, i, self.r)
+            Xa[:, i] = Xai[:, center_index]
 
         self.Xa = Xa.T
 

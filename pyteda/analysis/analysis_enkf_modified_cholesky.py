@@ -52,6 +52,9 @@ class AnalysisEnKFModifiedCholesky(Analysis):
         D[0, 0] = 1 / np.var(DX[0, :])  # We are estimating D^{-1}
         for i in range(1, n):
             ind_prede = self.model.get_pre(i, self.r)
+            if len(ind_prede) == 0:
+                D[i, i] = 1 / np.var(y)
+                continue
             y = DX[i, :]
             X = DX[ind_prede, :].T
             lr_fit = lr.fit(X, y)
