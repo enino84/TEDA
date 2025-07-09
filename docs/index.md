@@ -237,7 +237,7 @@ import user_methods.my_enkf
 model = Lorenz96()
 background = Background(model, ensemble_size=20)
 observation = Observation(m=32, std_obs=0.01)
-params = {'obs_freq': 0.1, 'obs_times': 10, 'inf_fact': 1.04}
+params = {'obs_freq': 0.1, 'end_time': 10, 'inf_fact': 1.04}
 
 # ✅ Use your registered custom method via factory
 analysis = AnalysisFactory("my_enkf", model=model).create_analysis()

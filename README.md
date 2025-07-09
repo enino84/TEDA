@@ -156,6 +156,7 @@ If you use **TEDA** in your teaching or research, please cite:
 ## 📚 More Resources
 
 * 🧪 Explore [examples/](https://github.com/enino84/TEDA/tree/main/examples) to try different filters and models.
+* More examples here [Google Colab](https://colab.research.google.com/drive/1Ts67iE19KtMuWd0CF8_GGGqE3wRQjC2G?usp=sharing)
 * 📖 Full documentation available in the `docs/` folder.
 * ➕ Want to add your own method? TEDA supports [custom DA methods via registry](docs/custom_methods.md).
 
