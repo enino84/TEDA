@@ -20,7 +20,7 @@ Keywords: Data Assimilation, Ensemble Kalman Filter, Education, Python.
 
 To enhance the learning experience, **TEDA** is built around **toy models** that exhibit chaotic behavior under specific configurations. These models are ideal for experimenting with and validating various Data Assimilation (DA) techniques in a hands-on, controlled setting.
 
-Currently, TEDA includes the **Lorenz 96 model** (40 variables), a well-known benchmark in DA research.
+Currently, TEDA includes the **Lorenz 96 model** (40 variables), a well-known benchmark in DA research, and a **2D barotropic quasi-geostrophic (QG) model** with spectral dynamics and periodic boundary conditions.
 
 > 📌 *Support for other classic chaotic systems like the Duffing equation and Lorenz 63 may be added in future versions.*
 
@@ -118,14 +118,14 @@ observation = Observation(m=32, std_obs=0.01)
 
 analysis = AnalysisFactory("letkf", model=model).create_analysis()
 
-params = {'obs_freq': 0.1, 'obs_times': 10, 'inf_fact': 1.04}
+params = {'obs_freq': 0.1, 'end_time': 10, 'inf_fact': 1.04}
 sim = Simulation(model, background, analysis, observation, params=params)
 sim.run()
 
 errb, erra = sim.get_errors()
 ```
 
-📈 For visualization and full working examples, check the [`examples/`](examples/) folder.
+📈 For visualization and full working examples, check the [`examples/`](https://github.com/enino84/TEDA/tree/main/examples) folder.
 
 ---
 
@@ -155,7 +155,7 @@ If you use **TEDA** in your teaching or research, please cite:
 
 ## 📚 More Resources
 
-* 🧪 Explore [examples/](examples/) to try different filters and models.
+* 🧪 Explore [examples/](https://github.com/enino84/TEDA/tree/main/examples) to try different filters and models.
 * 📖 Full documentation available in the `docs/` folder.
 * ➕ Want to add your own method? TEDA supports [custom DA methods via registry](docs/custom_methods.md).
 

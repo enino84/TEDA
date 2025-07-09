@@ -1,6 +1,6 @@
 [project]
 name = "pyteda"
-version = "0.2.0"
+version = "0.2.5"
 description = "TEDA: Toy models and ensemble-based Data Assimilation methods for education and experimentation"
 readme = "README.md"
 requires-python = ">=3.7"
