@@ -19,12 +19,12 @@ observation = Observation(m=400, std_obs=0.01)  # 👈 m must be < N*N (e.g. 400
 
 # Simulation parameters
 params = {
-    'obs_freq': 0.1,     # Frequency of observations
-    'obs_times': 20,     # Number of observation cycles
+    'obs_freq': 5,     # Frequency of observations
+    'end_time': 50,     # Number of observation cycles
     'inf_fact': 1.04     # Inflation factor
 }
 
-analysis = AnalysisFactory("enkf-modified-cholesky", model=model).create_analysis()
+analysis = AnalysisFactory("enkf-modified-cholesky", model=model, r=2).create_analysis()
 
 # Run simulation
 sim = Simulation(model, background, analysis, observation, params=params)

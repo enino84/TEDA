@@ -6,14 +6,14 @@ class Simulation:
     """Class that runs the simulation and calculates the errors."""
 
     def __init__(self, model, background, analysis, observation,
-                 params={'obs_freq': 0.1, 'obs_times': 15, 'inf_fact': 1.04},
+                 params={'obs_freq': 0.1, 'end_time': 15, 'inf_fact': 1.04},
                  log_level=logging.INFO):
         self.model = model
         self.background = background
         self.analysis = analysis
         self.observation = observation
         self.obs_freq = params['obs_freq']
-        self.obs_times = params['obs_times']
+        self.end_time = params['end_time']
         self.inf_fact = params['inf_fact']
         self.store_back_state = params.get('store_back_state', False)
         self.store_post_state = params.get('store_post_state', False)
@@ -45,15 +45,16 @@ class Simulation:
 
     def run(self):
         """Runs the simulation."""
-        self.error_a = np.zeros(self.obs_times)
-        self.error_b = np.zeros(self.obs_times)
+        self.error_a = []
+        self.error_b = []
 
         xtk = self.model.get_initial_condition()
         Xbk = self.background.get_initial_ensemble()
         T = np.linspace(0, self.obs_freq, num=2)
+        t = 0
 
-        for k in range(self.obs_times):
-            self.logger.info(f"Time step {k+1}/{self.obs_times}")
+        while t<=self.end_time:
+            self.logger.info(f"Time step {t} - {self.end_time}")
 
             self.observation.generate_observation(xtk)
             Xak = self.analysis.perform_assimilation(self.background, self.observation)
@@ -65,24 +66,29 @@ class Simulation:
             xak = self.analysis.get_analysis_state()
             xbk = self.background.get_background_state()
 
-            self.error_a[k] = self.relative_error(xtk, xak)
-            self.error_b[k] = self.relative_error(xtk, xbk)
+            self.error_a.append(self.relative_error(xtk, xak))
+            self.error_b.append(self.relative_error(xtk, xbk))
 
-            self.logger.debug(f"Background error: {self.error_b[k]:.4f}, Analysis error: {self.error_a[k]:.4f}")
+            self.logger.debug(f"Background error: {self.error_b[-1]:.4f}, Analysis error: {self.error_a[-1]:.4f}")
 
             # ✅ Only store if current step is in store_state_at
-            if k in self.store_state_at:
+            if t in self.store_state_at:
                 if self.store_back_state:
                     self.background_states.append(xbk.copy())
                 if self.store_post_state:
                     self.analysis_states.append(xak.copy())
                 if self.store_ref_state:
                     self.truth_states.append(xtk.copy())
-                self._stored_indices.append(k)
+                self._stored_indices.append(t)
 
             # Forecast step
             Xbk = self.background.forecast_step(Xak, T)
             xtk = self.model.propagate(xtk, T)
+
+            t+= self.obs_freq
+
+        self.error_a = np.array(self.error_a)
+        self.error_b = np.array(self.error_b)
 
         self.logger.info("Simulation completed.")
 

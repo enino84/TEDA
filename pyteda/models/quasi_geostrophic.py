@@ -56,8 +56,11 @@ class QGModel(Model):
         psi_hat[0, 0] = 0.0
         psi = ifft2(psi_hat).real
 
-        nt = len(T) - 1
-        for step in range(nt):
+        t = T[0]
+        t_end = T[-1]
+
+        while t < t_end:
+            t += self.dt
             zeta = self.laplacian(psi)
             q = zeta - self.F * psi
             j = self.arakawa_jacobian(psi, q)
@@ -77,7 +80,7 @@ class QGModel(Model):
             return np.concatenate([q.flatten(), psi.flatten()])
         return None
 
-    def get_initial_condition(self, seed=42, T=np.arange(0, 25, 0.001)):
+    def get_initial_condition(self, seed=42, T=np.arange(0, 25, 0.01)):
         np.random.seed(seed)
         psi0 = 1e-4 * np.random.randn(self.N, self.N)
         q0 = self.laplacian(psi0) - self.F * psi0

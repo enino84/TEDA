@@ -9,18 +9,18 @@ from pyteda.observation import Observation
 from pyteda.analysis.analysis_factory import AnalysisFactory
 
 # 1. Setup
-model = QGModel(N=32, dt=0.001, F=1600.0)
+model = QGModel(N=18, dt=0.01, F=1600.0)
 background = Background(model, ensemble_size=20)
 observation = Observation(m=400, std_obs=0.01)
 
 params = {
-    'obs_freq': 1,
-    'obs_times': 50,
+    'obs_freq': 5,
+    'end_time': 100,
     'inf_fact': 1.04,
     'store_back_state': True,
     'store_post_state': True,
     'store_ref_state': True,
-    'store_state_at': [0, 25, 49]
+    'store_state_at': [0, 50, 100]
 }
 
 analysis = AnalysisFactory("enkf-modified-cholesky", model=model).create_analysis()
